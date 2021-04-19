@@ -20,7 +20,7 @@ RSpec.describe Transaction do
       expect(transaction_repo.transaction_list[0].id).to eq(1)
     end
 
-    it 'can return invoice id' do
+    it 'can return transaction id' do
       expect(transaction_repo.transaction_list[0].invoice_id).to eq(2179)
     end
 
