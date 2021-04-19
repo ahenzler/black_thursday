@@ -1,79 +1,37 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/rcasias/turing-mod1/projects/black_thursday/spec/transaction_spec.rb": {
+      "/Users/rcasias/turing-mod1/projects/black_thursday/spec/transaction_repo_spec.rb": {
         "lines": [
           1,
           1,
           1,
-          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
           1,
           null,
           1,
           null,
-          null,
-          1,
-          null,
-          1,
-          1,
-          1,
-          null,
-          null,
-          null,
-          1,
-          1,
           1,
           null,
           null,
           1,
-          1,
-          null,
           null,
           1,
-          1,
-          null,
-          null,
-          1,
-          1,
-          null,
-          null,
-          1,
-          1,
-          null,
-          null,
-          1,
-          1,
-          null,
-          null,
-          1,
-          1,
-          null,
-          null,
-          null
-        ]
-      },
-      "/Users/rcasias/turing-mod1/projects/black_thursday/lib/transaction.rb": {
-        "lines": [
-          1,
-          null,
           1,
           1,
           null,
           null,
           null,
-          null,
-          null,
-          null,
-          null,
           1,
-          4985,
-          4985,
-          4985,
-          4985,
-          4985,
-          4985,
-          4985,
-          4985,
+          1,
+          1,
+          1,
+          null,
           null,
           null
         ]
@@ -554,7 +512,33 @@
           null,
           null,
           1,
-          0,
+          2,
+          null,
+          null
+        ]
+      },
+      "/Users/rcasias/turing-mod1/projects/black_thursday/lib/transaction.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          4985,
+          4985,
+          4985,
+          4985,
+          4985,
+          4985,
+          4985,
+          4985,
           null,
           null
         ]
@@ -611,6 +595,6 @@
         ]
       }
     },
-    "timestamp": 1618852789
+    "timestamp": 1618854288
   }
 }
