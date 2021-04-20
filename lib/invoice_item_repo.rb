@@ -18,7 +18,7 @@ class InvoiceItemRepo
     invoice_items = CSV.open(csv_files, headers: true,
     header_converters: :symbol)
 
-    @invoice_items_list = invoice_items.map do |invoice_item|
+    @invoice_item_list = invoice_items.map do |invoice_item|
       InvoiceItem.new(invoice_item, self)
     end
   end
@@ -32,9 +32,7 @@ class InvoiceItemRepo
   end
 
   def find_all_by_item_id(item_id)
-    @invoice_item_list.find_all do |invoice_item|
-      invoice_item.item_id == item_id
-    end
+    find_all_by_item_id_repo(item_id, @invoice_item_list)
   end
 
   def find_all_by_invoice_id(invoice_id)
