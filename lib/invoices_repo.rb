@@ -37,9 +37,7 @@ class InvoiceRepo
   end
 
   def find_all_by_merchant_id(id)
-    @invoice_list.find_all do |invoice|
-      invoice.merchant_id == id
-    end
+    find_all_by_merchant_id_repo(id, @invoice_list)
   end
 
   def find_all_by_status(status)

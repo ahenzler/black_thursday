@@ -12,4 +12,10 @@ module Findable
     end
   end
 
+  def find_all_by_merchant_id_repo(merchant_id, repo)
+    repo.find_all do |instance|
+      instance.merchant_id == merchant_id
+    end
+  end
+
 end
