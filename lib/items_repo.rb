@@ -1,9 +1,11 @@
 require_relative './items'
+require_relative './findable'
 require 'time'
 require 'csv'
 require 'bigdecimal'
 
 class ItemRepo
+  include Findable
   attr_reader :item_list
 
   def initialize(csv_files, engine)
@@ -29,9 +31,7 @@ class ItemRepo
   end
 
   def find_by_id(id)
-    @item_list.find do |item|
-      item.id == id
-    end
+    find_by_id_repo(id, @item_list)
   end
 
   def find_by_name(name)
