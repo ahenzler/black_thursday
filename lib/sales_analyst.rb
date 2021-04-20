@@ -6,6 +6,7 @@ require_relative './merchants_repo'
 require_relative './invoices'
 require_relative './invoices_repo'
 require_relative './mathable'
+require 'bigdecimal'
 require 'csv'
 
 class SalesAnalyst
@@ -38,17 +39,17 @@ class SalesAnalyst
     @all_invoices ||= @invoices_repo.all
   end
 
-  # def all_invoice_items
-  #   @all_invoice_items ||= @invoice_items_repo.all
-  # end
-  #
-  # def all_transactions
-  #   @all_transactions ||= @transactions_repo.all
-  # end
-  #
-  # def all_customers
-  #   @all_customers ||= @customers_repo.all
-  # end
+  def all_invoice_items
+    @all_invoice_items ||= @invoice_items_repo.all
+  end
+
+  def all_transactions
+    @all_transactions ||= @transactions_repo.all
+  end
+
+  def all_customers
+    @all_customers ||= @customers_repo.all
+  end
 
   def item_prices
    all_items.sum do |item|
@@ -107,6 +108,8 @@ class SalesAnalyst
     end
     merchant_ids_with_high_item_count.map do |merchant_id|
       @merchants_repo.find_by_id(merchant_id)
+      #where you are iterating more than once in one method
+      # split off into other method?
     end
   end
 
@@ -157,6 +160,7 @@ class SalesAnalyst
     end
     merchants_num_invoices_hash = Hash[merchant_id_hash_keys.zip(invoices_per_merchant)]
   end
+  #know which keys we have grab those ten keys and make a new hash that we test
 
   def top_merchants_by_invoice_count
     merchant_ids_with_high_invoice_count = []
@@ -169,6 +173,7 @@ class SalesAnalyst
       @merchants_repo.find_by_id(merchant_id)
     end
   end
+  #stub helpers allow them to recive helper and tell it
 
   def bottom_merchants_by_invoice_count
     merchant_ids_with_low_invoice_count = []
@@ -223,5 +228,48 @@ class SalesAnalyst
     end.length
     rough = ((num_of_matching_invoices.to_f / all_invoices.length.to_f) * 100)
     result = rough.round(2)
+  end
+
+  def find_transaction(id)
+    all_transactions.find_all do |transaction|
+      transaction.invoice_id == id
+    end
+  end
+
+  def transactions_exist?(invoice_id)
+    @transactions = find_transaction(invoice_id)
+    @transactions != []
+  end
+
+  def failed_transactions
+    @transactions.map do |transaction|
+      if transaction.result == :failed
+        false
+      else
+        true
+      end
+    end
+  end
+
+  def invoice_paid_in_full?(invoice_id)
+    if transactions_exist?(invoice_id)
+      failed_transactions.uniq.first
+    else
+      false
+    end
+  end
+
+  def find_invoice_items(id)
+    all_invoice_items.find_all do |invoice|
+        invoice.invoice_id == id
+    end
+  end
+
+  def invoice_total(invoice_id)
+    if invoice_paid_in_full?(invoice_id)
+      total = find_invoice_items(invoice_id).map do |invoice|
+        invoice.unit_price * invoice.quantity
+      end.sum
+    end
   end
 end
