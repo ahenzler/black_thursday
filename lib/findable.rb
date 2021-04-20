@@ -22,5 +22,4 @@ module Findable
       instance.invoice_id == invoice_id
     end
   end
-
 end
