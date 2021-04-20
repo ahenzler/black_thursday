@@ -18,4 +18,10 @@ module Findable
     end
   end
 
+  def find_all_by_invoice_id_repo(invoice_id, repo)
+    repo.find_all do |instance|
+      instance.invoice_id == invoice_id
+    end
+  end
+
 end

@@ -30,9 +30,7 @@ class TransactionRepo
   end
 
   def find_all_by_invoice_id(id)
-    @transaction_list.find_all do |transaction|
-      transaction.invoice_id == id
-    end
+    find_all_by_invoice_id_repo(id, @transaction_list)
   end
 
   def find_all_by_credit_card_number(number)

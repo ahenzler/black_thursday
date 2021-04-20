@@ -36,9 +36,7 @@ class InvoiceItemRepo
   end
 
   def find_all_by_invoice_id(invoice_id)
-    @invoice_item_list.find_all do |invoice_item|
-      invoice_item.invoice_id == invoice_id
-    end
+    find_all_by_invoice_id_repo(invoice_id, @invoice_item_list)
   end
 
   def create(attributes)
