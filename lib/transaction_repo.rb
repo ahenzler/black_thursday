@@ -1,9 +1,11 @@
 require_relative './transaction'
+require_relative './findable'
 require 'time'
 require 'csv'
 require 'bigdecimal'
 
 class TransactionRepo
+  include Findable
   attr_reader :transaction_list
 
   def initialize(csv_files, engine)
@@ -24,15 +26,11 @@ class TransactionRepo
   end
 
   def find_by_id(id)
-    @transaction_list.find do |transaction|
-      transaction.id == id
-    end
+    find_by_id_repo(id, @transaction_list)
   end
 
   def find_all_by_invoice_id(id)
-    @transaction_list.find_all do |transaction|
-      transaction.invoice_id == id
-    end
+    find_all_by_invoice_id_repo(id, @transaction_list)
   end
 
   def find_all_by_credit_card_number(number)

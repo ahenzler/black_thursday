@@ -32,15 +32,15 @@ RSpec.describe TransactionRepo do
     end
 
     it "can find all by credit_card_number" do
-      expect(transaction_repo.find_all_by_credit_card_number(4068631943231473).class).to eq(Array)
-      expect(transaction_repo.find_all_by_credit_card_number(4068631943231473).length).to eq(1)
-      expect(transaction_repo.find_all_by_credit_card_number(4068631943231473).first).to eq(transaction_repo.transaction_list[0])
+      expect(transaction_repo.find_all_by_credit_card_number("4068631943231473").class).to eq(Array)
+      expect(transaction_repo.find_all_by_credit_card_number("4068631943231473").length).to eq(1)
+      expect(transaction_repo.find_all_by_credit_card_number("4068631943231473").first).to eq(transaction_repo.transaction_list[0])
       expect(transaction_repo.find_all_by_credit_card_number(9999999)).to eq([])
     end
 
     it "can find all by result" do
-      expect(transaction_repo.find_all_by_result("success").class).to eq(Array)
-      expect(transaction_repo.find_all_by_result("failed").length).to eq(827)
+      expect(transaction_repo.find_all_by_result(:success).class).to eq(Array)
+      expect(transaction_repo.find_all_by_result(:failed).length).to eq(827)
     end
 
     it "can create a transaction" do
@@ -58,9 +58,9 @@ RSpec.describe TransactionRepo do
 
       expect(expected.class).to eq(Transaction)
       expect(expected.invoice_id).to eq(8)
-      expect(expected.credit_card_number).to eq(4242424242424242)
-      expect(expected.credit_card_expiration_date).to eq(220)
-      expect(expected.result).to eq("failed")
+      expect(expected.credit_card_number).to eq("4242424242424242")
+      expect(expected.credit_card_expiration_date).to eq("0220")
+      expect(expected.result).to eq(:failed)
     end
 
     it "can update transaction" do

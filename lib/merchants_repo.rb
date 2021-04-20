@@ -1,7 +1,9 @@
 require_relative './merchants'
+require_relative './findable'
 require 'csv'
 
 class MerchantRepo
+  include Findable
   attr_reader :merchants_list
 
   def initialize(csv_files, engine)
@@ -27,9 +29,7 @@ class MerchantRepo
   end
 
   def find_by_id(id)
-    @merchants_list.find do |merchant|
-      merchant.id == id
-    end
+    find_by_id_repo(id, @merchants_list)
   end
 
   def find_by_name(name)
@@ -70,6 +70,12 @@ class MerchantRepo
       merchant.id == id
     end
     @merchants_list.delete(merchant)
+  end
+
+  def merchant_id_array
+    @merchants_list.map do |merchant|
+      merchant.id
+    end
   end
 
 end

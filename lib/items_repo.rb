@@ -1,9 +1,11 @@
 require_relative './items'
+require_relative './findable'
 require 'time'
 require 'csv'
 require 'bigdecimal'
 
 class ItemRepo
+  include Findable
   attr_reader :item_list
 
   def initialize(csv_files, engine)
@@ -29,9 +31,7 @@ class ItemRepo
   end
 
   def find_by_id(id)
-    @item_list.find do |item|
-      item.id == id
-    end
+    find_by_id_repo(id, @item_list)
   end
 
   def find_by_name(name)
@@ -59,9 +59,7 @@ class ItemRepo
   end
 
   def find_all_by_merchant_id(merchant_id)
-    @item_list.find_all do |item|
-      item.merchant_id == merchant_id
-    end
+    find_all_by_merchant_id_repo(merchant_id, @item_list)
   end
 
   def create(attributes)
@@ -100,4 +98,17 @@ class ItemRepo
       @item_list.delete(item)
     end
   end
+
+  def item_prices_sum
+   @item_list.sum do |item|
+      item.unit_price
+    end
+  end
+
+  def item_prices_array
+   @item_list.map do |item|
+      item.unit_price
+    end
+  end
+
 end
