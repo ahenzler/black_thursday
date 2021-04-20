@@ -1,5 +1,4 @@
 module Mathable
-
   def z_score(value, average, standard_deviation)
     ((value - average) / standard_deviation).to_f
   end

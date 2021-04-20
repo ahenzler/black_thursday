@@ -1,5 +1,4 @@
 module Findable
-
   def find_by_id_repo(id, repo)
     repo.find do |instance|
       instance.id == id
