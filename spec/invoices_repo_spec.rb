@@ -49,10 +49,10 @@ RSpec.describe InvoiceRepo do
     end
 
     it 'can return invoices with matching status' do
-      expect(invoice_repository.find_all_by_status("pending").class).to eq(Array)
-      expect(invoice_repository.find_all_by_status("pending").length).to eq(1473)
-      expect(invoice_repository.find_all_by_status("pending").first).to eq(invoice_repository.invoice_list[0])
-      expect(invoice_repository.find_all_by_status("BlahBlah")).to eq([])
+      expect(invoice_repository.find_all_by_status(:pending).class).to eq(Array)
+      expect(invoice_repository.find_all_by_status(:pending).length).to eq(1473)
+      expect(invoice_repository.find_all_by_status(:pending).first).to eq(invoice_repository.invoice_list[0])
+      expect(invoice_repository.find_all_by_status(:BlahBlah)).to eq([])
     end
 
     it 'can create new invoices' do
@@ -69,7 +69,7 @@ RSpec.describe InvoiceRepo do
       expected = invoice_repository.find_by_id(4986)
       expect(expected.customer_id).to eq(999)
       expect(expected.merchant_id).to eq(12335541)
-      expect(expected.status).to eq("pending")
+      expect(expected.status).to eq(:pending)
     end
 
     it 'can update an invoice' do

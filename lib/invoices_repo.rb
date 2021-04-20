@@ -1,9 +1,11 @@
 require_relative './invoices'
+require_relative './findable'
 require 'time'
 require 'csv'
 require 'bigdecimal'
 
 class InvoiceRepo
+  include Findable
   attr_reader :invoice_list
 
   def initialize(csv_files, engine)
@@ -25,9 +27,7 @@ class InvoiceRepo
   end
 
   def find_by_id(id)
-    @invoice_list.find do |invoice|
-      invoice.id == id
-    end
+    find_by_id_repo(id, @invoice_list)
   end
 
   def find_all_by_customer_id(id)
