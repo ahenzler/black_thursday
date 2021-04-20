@@ -144,7 +144,6 @@ class SalesAnalyst
     end
     merchants_num_invoices_hash = Hash[merchant_id_hash_keys.zip(invoices_per_merchant)]
   end
-  #know which keys we have grab those ten keys and make a new hash that we test
 
   def merchant_ids_with_high_invoice_count
     merchant_ids_with_high_invoice_count = []
@@ -161,7 +160,6 @@ class SalesAnalyst
       @merchants_repo.find_by_id(merchant_id)
     end
   end
-  #stub helpers allow them to recive helper and tell it
 
   def merchant_ids_with_low_invoice_count
     merchant_ids_with_low_invoice_count = []
