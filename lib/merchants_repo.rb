@@ -72,4 +72,10 @@ class MerchantRepo
     @merchants_list.delete(merchant)
   end
 
+  def merchant_id_array
+    @mercahnts_list.map do |merchant|
+      merchant.id
+    end
+  end
+
 end

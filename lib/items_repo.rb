@@ -98,4 +98,17 @@ class ItemRepo
       @item_list.delete(item)
     end
   end
+
+  def item_prices_sum
+   @item_list.sum do |item|
+      item.unit_price
+    end
+  end
+
+  def item_prices_array
+   @item_list.map do |item|
+      item.unit_price
+    end
+  end
+
 end

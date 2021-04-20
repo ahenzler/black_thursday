@@ -51,30 +51,12 @@ class SalesAnalyst
     @all_customers ||= @customers_repo.all
   end
 
-  def item_prices
-   all_items.sum do |item|
-      item.unit_price
-    end
-  end
-
-  def item_prices_array
-   all_items.map do |item|
-      item.unit_price
-    end
-  end
-
   def average_items_per_merchant
     average(all_items.count.to_f, all_merchants.count.to_f).round(2)
   end
 
-  def merchant_id_array
-    all_merchants.map do |merchant|
-      merchant.id
-    end
-  end
-
   def items_per_merchant
-    merchant_id_array.map do |id|
+    @merchants_repo.merchant_id_array.map do |id|
       @items_repo.find_all_by_merchant_id(id).length
     end
   end
@@ -84,11 +66,11 @@ class SalesAnalyst
   end
 
   def average_unit_price
-    average(item_prices.to_f, all_items.length.to_f)
+    average(@items_repo.item_prices_sum.to_f, all_items.length.to_f)
   end
 
   def average_unit_price_standard_deviation
-    standard_deviation(item_prices_array, average_unit_price)
+    standard_deviation(@items_repo.item_prices_array, average_unit_price)
   end
 
   def merchants_num_items_hash

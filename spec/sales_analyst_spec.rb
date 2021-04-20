@@ -43,7 +43,7 @@ RSpec.describe SalesAnalyst do
       expect(expected.class).to eq(Array)
     end
 
-    xit 'can find the average price of a merchants items' do
+    it 'can find the average price of a merchants items' do
 
       expect(sales_analyst.average_item_price_for_merchant(12334105).class).to eq(BigDecimal)
       expect(sales_analyst.average_item_price_for_merchant(12334105)).to eq(0.1666e2)
@@ -54,7 +54,7 @@ RSpec.describe SalesAnalyst do
       expect(sales_analyst.average_average_price_per_merchant).to eq(0.35029e3)
     end
 
-    xit 'can return items 2 standard deviations above average item price' do
+    it 'can return items 2 standard deviations above average item price' do
       expect(sales_analyst.golden_items.class).to eq(Array)
       expect(sales_analyst.golden_items.length).to eq(5)
     end
@@ -89,12 +89,12 @@ RSpec.describe SalesAnalyst do
       expect(sales_analyst.invoice_status(:returned)).to eq(13.5)
     end
 
-    it 'can see if paid in full ' do
+    xit 'can see if paid in full ' do
       expect(sales_analyst.invoice_paid_in_full?(2179)).to eq(true)
       expect(sales_analyst.invoice_paid_in_full?(1752)).to eq(false)
     end
 
-    it 'can get the total of the invoice' do
+    xit 'can get the total of the invoice' do
       expect(sales_analyst.invoice_total(46)).to eq(BigDecimal(98668)/100)
       expect(sales_analyst.invoice_total(46).class).to eq(BigDecimal)
     end
