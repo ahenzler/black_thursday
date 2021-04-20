@@ -59,9 +59,7 @@ class ItemRepo
   end
 
   def find_all_by_merchant_id(merchant_id)
-    @item_list.find_all do |item|
-      item.merchant_id == merchant_id
-    end
+    find_all_by_merchant_id_repo(merchant_id, @item_list)
   end
 
   def create(attributes)
