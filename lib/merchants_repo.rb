@@ -73,7 +73,7 @@ class MerchantRepo
   end
 
   def merchant_id_array
-    @mercahnts_list.map do |merchant|
+    @merchants_list.map do |merchant|
       merchant.id
     end
   end

@@ -81,17 +81,19 @@ class SalesAnalyst
     merchants_num_items_hash = Hash[merchant_id_hash_keys.zip(items_per_merchant)]
   end
 
-  def merchants_with_high_item_count
+  def merchant_ids_with_high_item_count
     merchant_ids_with_high_item_count = []
     merchants_num_items_hash.each do |merchant_id, num|
-      if z_score(num, average_items_per_merchant, average_items_per_merchant_standard_deviation) >= 1.0
+      if z_score(num, average_items_per_merchant,   average_items_per_merchant_standard_deviation) >= 1.0
         merchant_ids_with_high_item_count << merchant_id
       end
     end
+    merchant_ids_with_high_item_count
+  end
+
+  def merchants_with_high_item_count
     merchant_ids_with_high_item_count.map do |merchant_id|
       @merchants_repo.find_by_id(merchant_id)
-      #where you are iterating more than once in one method
-      # split off into other method?
     end
   end
 
@@ -126,7 +128,7 @@ class SalesAnalyst
   end
 
   def invoices_per_merchant
-    merchant_id_array.map do |id|
+    @merchants_repo.merchant_id_array.map do |id|
       @invoices_repo.find_all_by_merchant_id(id).length
     end
   end
@@ -144,26 +146,34 @@ class SalesAnalyst
   end
   #know which keys we have grab those ten keys and make a new hash that we test
 
-  def top_merchants_by_invoice_count
+  def merchant_ids_with_high_invoice_count
     merchant_ids_with_high_invoice_count = []
     merchants_num_invoices_hash.each do |merchant_id, num|
       if z_score(num, average_invoices_per_merchant, average_invoices_per_merchant_standard_deviation) >= 2.0
         merchant_ids_with_high_invoice_count << merchant_id
       end
     end
+    merchant_ids_with_high_invoice_count
+  end
+
+  def top_merchants_by_invoice_count
     merchant_ids_with_high_invoice_count.map do |merchant_id|
       @merchants_repo.find_by_id(merchant_id)
     end
   end
   #stub helpers allow them to recive helper and tell it
 
-  def bottom_merchants_by_invoice_count
+  def merchant_ids_with_low_invoice_count
     merchant_ids_with_low_invoice_count = []
     merchants_num_invoices_hash.each do |merchant_id, num|
       if z_score(num, average_invoices_per_merchant, average_invoices_per_merchant_standard_deviation) <= -2.0
         merchant_ids_with_low_invoice_count << merchant_id
       end
     end
+    merchant_ids_with_low_invoice_count
+  end
+
+  def bottom_merchants_by_invoice_count
     merchant_ids_with_low_invoice_count.map do |merchant_id|
       @merchants_repo.find_by_id(merchant_id)
     end

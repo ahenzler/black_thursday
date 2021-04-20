@@ -32,7 +32,7 @@ RSpec.describe Invoice do
     end
 
     it 'can return status' do
-      expect(invoice_repo.invoice_list[0].status).to eq("pending")
+      expect(invoice_repo.invoice_list[0].status).to eq(:pending)
     end
 
     it 'can return time created at' do
