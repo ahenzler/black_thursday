@@ -1,9 +1,11 @@
 require_relative './customer'
+require_relative './findable'
 require 'time'
 require 'csv'
 require 'bigdecimal'
 
 class CustomerRepo
+  include Findable
   attr_reader :customer_list
 
   def initialize(csv_files, engine)
@@ -24,9 +26,7 @@ class CustomerRepo
   end
 
   def find_by_id(id)
-    @customer_list.find do |customer|
-      customer.id == id
-    end
+    find_by_id_repo(id, @customer_list)
   end
 
   def find_all_by_first_name(fragment)
