@@ -6,7 +6,6 @@ require 'bigdecimal'
 
 class InvoiceItemRepo
   include Findable
-
   attr_reader :invoice_item_list
 
   def initialize(csv_files, engine)

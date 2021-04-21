@@ -77,5 +77,4 @@ class MerchantRepo
       merchant.id
     end
   end
-
 end

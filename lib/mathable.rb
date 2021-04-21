@@ -15,5 +15,4 @@ module Mathable
     square_root = ((divided_sum)**0.5).to_f
     square_root.round(2)
   end
-
 end
