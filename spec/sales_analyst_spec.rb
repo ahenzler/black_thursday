@@ -109,19 +109,27 @@ RSpec.describe SalesAnalyst do
       expect(sales_analyst.total_revenue_by_date(Time.parse("2009-02-07"))).to eq(21067.77)
     end
 
-    xit 'can returny top revenue earners by given number' do
+    xit 'can return top revenue earners by given number' do
       expected = sales_analyst.top_revenue_earners(3)
       expect(expected.class).to eq(Array)
       expect(expected.first.class).to eq(Merchant)
       expect(expected.first.id).to eq(12334634)
     end
 
-    it 'can return merchants with pending invoices' do
+    it 'can return top revenue earners top 20' do
+      expected = sales_analyst.top_revenue_earners
+      expect(expected.class).to eq(Array)
+      expect(expected.first.class).to eq(Merchant)
+      expect(expected.first.id).to eq(12334634)
+      expect(expected.length).to eq(20)
+    end
+
+    xit 'can return merchants with pending invoices' do
       expect(sales_analyst.merchants_with_pending_invoices.length).to eq(467)
       expect(sales_analyst.merchants_with_pending_invoices.first.class).to eq(Merchant)
     end
 
-    it 'can return merchants with one item' do
+    xit 'can return merchants with one item' do
       expected = sales_analyst.merchants_with_only_one_item
 
       expect(expected.length).to eq 243

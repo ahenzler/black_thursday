@@ -315,7 +315,7 @@ class SalesAnalyst
       value
     end.reverse
   end
-  def top_revenue_earners(num)
+  def top_revenue_earners(num = 20)
     top_earners = sorted_array_merchants_totals.take(num)
     result = top_earners.map do |top_earner|
       @merchants_repo.find_by_id(top_earner[0])
