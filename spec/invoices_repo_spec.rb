@@ -96,5 +96,9 @@ RSpec.describe InvoiceRepo do
       expected = invoice_repository.find_by_id(1)
       expect(expected).to eq(nil)
     end
+
+    it 'can check if it exists' do
+      expect(invoice_repository.invoice_exists?(100000000)).to eq(false)
+    end
   end
 end
