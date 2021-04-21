@@ -262,4 +262,204 @@ class SalesAnalyst
       end.sum
     end
   end
+
+  def invoices_at_date(date)
+    invoices_at_date = all_invoices.find_all do |invoice|
+      invoice.created_at == date
+    end
+  end
+
+  def total_revenue_by_date(date)
+    total = invoices_at_date(date).sum do |invoice_at_date|
+      invoice_total(invoice_at_date.id)
+    end
+    total
+  end
+
+  def top_revenue_earners(num)
+    hash = all_invoices.each_with_object({}) do |invoice, hash|
+      if invoice_total(invoice.id) != nil
+        if hash[invoice.merchant_id].nil?
+          hash[invoice.merchant_id] = invoice_total(invoice_id)
+        else
+          hash[invoice.merchant_id] += invoice_total(invoice.id)
+        end
+      end
+    end
+    array = hash.sort_by do |key, value|
+      value
+    end.reverse
+    top_earners = array.take(num)
+    require'pry';binding.pry
+    result = top_earners.map do |top_earner|
+      @merchants_repo.find_by_id(top_earner[0])
+    end
+  end
+
+  def sum_invoice_totals(invoice, hash)
+    if hash[invoice.merchant_id].nil?
+      hash[invoice.merchant_id] = invoice_total(invoice.id)
+    else
+      hash[invoice.merchant_id] += invoice_total(invoice.id)
+    end
+  end
+  def merchant_invoice_total_hash
+    hash = all_invoices.each_with_object({}) do |invoice, hash|
+      if !invoice_total(invoice.id).nil?
+        sum_invoice_totals(invoice, hash)
+      end
+    end
+  end
+  def sorted_array_merchants_totals
+   merchant_invoice_total_hash.sort_by do |key, value|
+      value
+    end.reverse
+  end
+  def top_revenue_earners(num = 20)
+    top_earners = sorted_array_merchants_totals.take(num)
+    result = top_earners.map do |top_earner|
+      @merchants_repo.find_by_id(top_earner[0])
+    end
+  end
+
+  def invoice_id_transaction_result_hash
+    hash = all_invoices.each_with_object({}) do |invoice, hash|
+      hash[invoice.id] = []
+    end
+    all_transactions.each do |transaction|
+      hash[transaction.invoice_id] << transaction.result
+    end
+    hash
+  end
+  def pending_invoice_ids
+    pending_invoice_ids = []
+    invoice_id_transaction_result_hash.each do |k, v|
+      if v == [] || !v.include?(:success)
+         pending_invoice_ids << k
+      end
+    end
+    pending_invoice_ids
+  end
+  def pending_invoices
+    pending_invoices = pending_invoice_ids.map do |invoice_id|
+      @invoices_repo.find_by_id(invoice_id)
+    end
+  end
+  def pending_merchant_ids
+    pending_merchant_ids = pending_invoices.map do |invoice|
+      invoice.merchant_id
+    end.uniq
+  end
+  def merchants_with_pending_invoices
+    pending_merchants = pending_merchant_ids.map do |merchant_id|
+      @merchants_repo.find_by_id(merchant_id)
+    end
+  end
+
+  def merchant_ids_with_1_item
+    merchant_ids_with_1_item = []
+    merchants_num_items_hash.each do |key, value|
+      if value == 1
+        merchant_ids_with_1_item << key
+      end
+    end
+    merchant_ids_with_1_item
+  end
+  def merchants_with_only_one_item
+    merchant_ids_with_1_item.map do |num|
+      @merchants_repo.find_by_id(num)
+    end
+  end
+
+  def months
+    months = {
+      'Janurary' => 1,
+      'Feburary' => 2,
+      'March' => 3,
+      'April' => 4,
+      'May' => 5,
+      'June' => 6,
+      'July' => 7,
+      'August' => 8,
+      'September' => 9,
+      'October' => 10,
+      'November' => 11,
+      'December' => 12
+      }
+  end
+
+  def merchants_with_only_one_item_registered_in_month(month)
+    items_of_merchants_with_one_item = merchant_ids_with_1_item.flat_map do |num|
+      @items_repo.find_all_by_merchant_id(num)
+    end.uniq
+    array = []
+    items_of_merchants_with_one_item.each do |item|
+      if item.updated_at.month == months[month]
+        array << item
+      end
+    end
+    array
+    new = array.map do |array|
+      array.merchant_id
+    end.uniq
+    # require'pry';binding.pry
+  end
+
+  def revenue_by_merchant(merchant)
+    array = []
+    all_invoices.each do |invoice|
+      if invoice.merchant_id == merchant
+        array << invoice.id
+      end
+    end
+    array
+    array2 = []
+    array.each do |id|
+      if !invoice_total(id).nil?
+        array2 << id
+      end
+    end
+    result = array2.sum do |num|
+      invoice_total(num)
+    end
+
+  end
+
+  def invoices_for_merchant(merchant_id)
+    invoices_for_merchant = all_invoices.find_all do |invoice|
+      invoice.merchant_id == merchant_id
+    end
+  end
+
+  def invoice_items_for_merchant(merchant_id)
+    invoice_items_for_merchant = invoices_for_merchant(merchant_id).flat_map do |invoice|
+      @invoice_items_repo.find_all_by_invoice_id(invoice.id)
+    end
+  end
+
+  def sorted_highest_sold_invoice_items(merchant_id)
+    sorted_highest_sold_invoice_items = invoice_items_for_merchant(merchant_id).sort_by do |invoice_item|
+      invoice_item.quantity
+    end.reverse
+  end
+
+  def highest_sold_invoice_items(merchant_id)
+    marker = sorted_highest_sold_invoice_items(merchant_id).first.quantity
+    highest_sold_invoice_items = sorted_highest_sold_invoice_items(merchant_id).find_all do |invoice_item|
+      invoice_item.quantity == marker
+    end
+  end
+
+  def most_sold_item_for_merchant(merchant_id)
+    highest_sold_invoice_items(merchant_id).map do |invoice_item|
+      @items_repo.find_by_id(invoice_item.item_id)
+    end.uniq
+  end
+
+  def best_item_for_merchant(merchant_id)
+    sorted_highest_revenue_invoice_items = invoice_items_for_merchant(merchant_id).sort_by do |invoice_item|
+      ((invoice_item.quantity) * (invoice_item.unit_price))
+    end.reverse
+    @items_repo.find_by_id(sorted_highest_revenue_invoice_items.first.item_id)
+  end
 end
