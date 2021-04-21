@@ -322,42 +322,61 @@ class SalesAnalyst
     end
   end
 
-  def merchants_with_pending_invoices
+  def invoice_id_transaction_result_hash
     hash = all_invoices.each_with_object({}) do |invoice, hash|
       hash[invoice.id] = []
     end
     all_transactions.each do |transaction|
       hash[transaction.invoice_id] << transaction.result
     end
+    hash
+  end
+  def pending_invoice_ids
     pending_invoice_ids = []
-    hash.each do |k, v|
+    invoice_id_transaction_result_hash.each do |k, v|
       if v == [] || !v.include?(:success)
-        pending_invoice_ids << k
+         pending_invoice_ids << k
       end
     end
+    pending_invoice_ids
+  end
+  def pending_invoices
     pending_invoices = pending_invoice_ids.map do |invoice_id|
       @invoices_repo.find_by_id(invoice_id)
     end
+  end
+  def pending_merchant_ids
     pending_merchant_ids = pending_invoices.map do |invoice|
       invoice.merchant_id
     end.uniq
+  end
+  def merchants_with_pending_invoices
     pending_merchants = pending_merchant_ids.map do |merchant_id|
       @merchants_repo.find_by_id(merchant_id)
     end
   end
 
-  def merchants_with_only_one_item
-    array = []
+  def merchant_ids_with_1_item
+    merchant_ids_with_1_item = []
     merchants_num_items_hash.each do |key, value|
       if value == 1
-        array << key
+        merchant_ids_with_1_item << key
       end
     end
-    array
-    array.map do |num|
+    merchant_ids_with_1_item
+  end
+  def merchants_with_only_one_item
+    merchant_ids_with_1_item.map do |num|
       @merchants_repo.find_by_id(num)
     end
   end
+
+  # def merchants_with_only_one_item_registered_in_month(month)
+  #   merchants_with_only_one_item.find_all do |merchant|
+  #     require'pry';binding.pry
+  #     merchant.created_at.month == month
+  #   end
+  # end
 
   def revenue_by_merchant(merchant)
     array = []
