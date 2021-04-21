@@ -262,4 +262,17 @@ class SalesAnalyst
       end.sum
     end
   end
+
+  def invoices_at_date(date)
+    invoices_at_date = all_invoices.find_all do |invoice|
+      invoice.created_at == date
+    end
+  end
+
+  def total_revenue_by_date(date)
+    total = invoices_at_date(date).sum do |invoice_at_date|
+      invoice_total(invoice_at_date.id)
+    end
+    total
+  end
 end

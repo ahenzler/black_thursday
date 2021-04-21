@@ -104,5 +104,9 @@ RSpec.describe SalesAnalyst do
       expect(sales_analyst.invoice_total(46)).to eq(BigDecimal(98668)/100)
       expect(sales_analyst.invoice_total(46).class).to eq(BigDecimal)
     end
+
+    it 'can return the total revenue at a given date' do
+      expect(sales_analyst.total_revenue_by_date(Time.parse("2009-02-07"))).to eq(21067.77)
+    end
   end
 end
