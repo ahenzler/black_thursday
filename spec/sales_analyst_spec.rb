@@ -106,7 +106,7 @@ RSpec.describe SalesAnalyst do
     end
 
     it 'can return the total revenue at a given date' do
-      expect(sales_analyst.total_revenue_by_date(Time.parse("2009-02-07"))).to eq(21067.77)
+      expect(sales_analyst.total_revenue_by_date("2009-02-07")).to eq(21067.77)
     end
   end
 end

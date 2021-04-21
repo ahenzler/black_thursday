@@ -262,4 +262,15 @@ class SalesAnalyst
       end.sum
     end
   end
+
+  def total_revenue_by_date(date)
+    array = all_invoices.find_all do |invoice|
+      time = invoice.created_at.to_s.split(' ').first
+      time == date
+    end
+    total = array.sum do |array|
+      invoice_total(array.id)
+    end
+    total
+  end
 end
