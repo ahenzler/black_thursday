@@ -359,4 +359,23 @@ class SalesAnalyst
     end
   end
 
+  def revenue_by_merchant(merchant)
+    array = []
+    all_invoices.each do |invoice|
+      if invoice.merchant_id == merchant
+        array << invoice.id
+      end
+    end
+    array
+    array2 = []
+    array.each do |id|
+      if !invoice_total(id).nil?
+        array2 << id
+      end
+    end
+    result = array2.sum do |num|
+      invoice_total(num)
+    end
+  end
+
 end

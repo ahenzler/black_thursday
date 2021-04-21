@@ -116,7 +116,7 @@ RSpec.describe SalesAnalyst do
       expect(expected.first.id).to eq(12334634)
     end
 
-    it 'can return top revenue earners top 20' do
+    xit 'can return top revenue earners top 20' do
       expected = sales_analyst.top_revenue_earners
       expect(expected.class).to eq(Array)
       expect(expected.first.class).to eq(Merchant)
@@ -131,9 +131,15 @@ RSpec.describe SalesAnalyst do
 
     xit 'can return merchants with one item' do
       expected = sales_analyst.merchants_with_only_one_item
-
       expect(expected.length).to eq 243
       expect(expected.first.class).to eq Merchant
+    end
+
+    it 'can return revenue by merchant' do
+      expected = sales_analyst.revenue_by_merchant(12334194)
+
+      expect(expected).to eq BigDecimal(expected)
+      expect(expected.class).to eq BigDecimal
     end
 
   end
