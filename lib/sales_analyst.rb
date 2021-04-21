@@ -462,5 +462,4 @@ class SalesAnalyst
     end.reverse
     @items_repo.find_by_id(sorted_highest_revenue_invoice_items.first.item_id)
   end
-
 end

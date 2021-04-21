@@ -152,9 +152,8 @@ RSpec.describe SalesAnalyst do
       expect(sales_analyst.most_sold_item_for_merchant(12334105).length).to eq(7)
     end
 
-    it 'can return best item for a merchant' do
-      expect(sales_analyst.best_item_for_a_merchant(12334105).length).to eq(1)
-      expect(sales_analyst.best_item_for_a_merchant(12334105)).to eq(1)
+    it 'can return the item that generated the most revenue for a merchant' do
+      expect(sales_analyst.best_item_for_merchant(12334105)).to be_instance_of(Item)
     end
 
   end
