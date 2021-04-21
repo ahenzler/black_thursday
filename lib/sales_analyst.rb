@@ -290,7 +290,6 @@ class SalesAnalyst
       value
     end.reverse
     top_earners = array.take(num)
-    require'pry';binding.pry
     result = top_earners.map do |top_earner|
       @merchants_repo.find_by_id(top_earner[0])
     end
@@ -303,6 +302,7 @@ class SalesAnalyst
       hash[invoice.merchant_id] += invoice_total(invoice.id)
     end
   end
+
   def merchant_invoice_total_hash
     hash = all_invoices.each_with_object({}) do |invoice, hash|
       if !invoice_total(invoice.id).nil?
@@ -310,11 +310,13 @@ class SalesAnalyst
       end
     end
   end
+
   def sorted_array_merchants_totals
    merchant_invoice_total_hash.sort_by do |key, value|
       value
     end.reverse
   end
+
   def top_revenue_earners(num = 20)
     top_earners = sorted_array_merchants_totals.take(num)
     result = top_earners.map do |top_earner|
@@ -331,6 +333,7 @@ class SalesAnalyst
     end
     hash
   end
+
   def pending_invoice_ids
     pending_invoice_ids = []
     invoice_id_transaction_result_hash.each do |k, v|
@@ -340,16 +343,19 @@ class SalesAnalyst
     end
     pending_invoice_ids
   end
+
   def pending_invoices
     pending_invoices = pending_invoice_ids.map do |invoice_id|
       @invoices_repo.find_by_id(invoice_id)
     end
   end
+
   def pending_merchant_ids
     pending_merchant_ids = pending_invoices.map do |invoice|
       invoice.merchant_id
     end.uniq
   end
+
   def merchants_with_pending_invoices
     pending_merchants = pending_merchant_ids.map do |merchant_id|
       @merchants_repo.find_by_id(merchant_id)
@@ -365,6 +371,7 @@ class SalesAnalyst
     end
     merchant_ids_with_1_item
   end
+
   def merchants_with_only_one_item
     merchant_ids_with_1_item.map do |num|
       @merchants_repo.find_by_id(num)
@@ -422,7 +429,6 @@ class SalesAnalyst
     result = array2.sum do |num|
       invoice_total(num)
     end
-
   end
 
   def invoices_for_merchant(merchant_id)
