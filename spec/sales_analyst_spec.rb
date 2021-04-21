@@ -116,7 +116,7 @@ RSpec.describe SalesAnalyst do
       expect(expected.first.id).to eq(12334634)
     end
 
-    xit 'can return top revenue earners top 20' do
+    it 'can return top revenue earners top 20' do
       expected = sales_analyst.top_revenue_earners
       expect(expected.class).to eq(Array)
       expect(expected.first.class).to eq(Merchant)
@@ -124,24 +124,24 @@ RSpec.describe SalesAnalyst do
       expect(expected.length).to eq(20)
     end
 
-    xit 'can return merchants with pending invoices' do
+    it 'can return merchants with pending invoices' do
       expect(sales_analyst.merchants_with_pending_invoices.length).to eq(467)
       expect(sales_analyst.merchants_with_pending_invoices.first.class).to eq(Merchant)
     end
 
-    xit 'can return merchants with one item' do
+    it 'can return merchants with one item' do
       expected = sales_analyst.merchants_with_only_one_item
       expect(expected.length).to eq 243
       expect(expected.first.class).to eq Merchant
     end
 
-    xit 'can return merchants with one item in given month' do
+    it 'can return merchants with one item in given month' do
       expected = sales_analyst.merchants_with_only_one_item_registered_in_month("March")
       expect(expected.length).to eq 21
       expect(expected.first.class).to eq Merchant
     end
 
-    xit 'can return revenue by merchant' do
+    it 'can return revenue by merchant' do
       expected = sales_analyst.revenue_by_merchant(12334194)
 
       expect(expected).to eq BigDecimal(expected)
@@ -152,8 +152,9 @@ RSpec.describe SalesAnalyst do
       expect(sales_analyst.most_sold_item_for_merchant(12334105).length).to eq(7)
     end
 
-    xit 'can return best item for a merchant' do
-      expect(sales_analyst.best_item_for_a_merchant(12334105).length).to eq([])
+    it 'can return best item for a merchant' do
+      expect(sales_analyst.best_item_for_a_merchant(12334105).length).to eq(1)
+      expect(sales_analyst.best_item_for_a_merchant(12334105)).to eq(1)
     end
 
   end

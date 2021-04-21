@@ -430,33 +430,37 @@ class SalesAnalyst
       invoice.merchant_id == merchant_id
     end
   end
+
   def invoice_items_for_merchant(merchant_id)
     invoice_items_for_merchant = invoices_for_merchant(merchant_id).flat_map do |invoice|
       @invoice_items_repo.find_all_by_invoice_id(invoice.id)
     end
   end
+
   def sorted_highest_sold_invoice_items(merchant_id)
     sorted_highest_sold_invoice_items = invoice_items_for_merchant(merchant_id).sort_by do |invoice_item|
       invoice_item.quantity
     end.reverse
   end
+
   def highest_sold_invoice_items(merchant_id)
     marker = sorted_highest_sold_invoice_items(merchant_id).first.quantity
     highest_sold_invoice_items = sorted_highest_sold_invoice_items(merchant_id).find_all do |invoice_item|
       invoice_item.quantity == marker
     end
   end
+
   def most_sold_item_for_merchant(merchant_id)
     highest_sold_invoice_items(merchant_id).map do |invoice_item|
       @items_repo.find_by_id(invoice_item.item_id)
     end.uniq
   end
 
-  # def best_item_for_a_merchant(merchant)
-  #   merchant = @merchants_repo.find_by_id(merchant)
-  #   # invoice_items_for_merhcants =
-  #   require'pry';binding.pry
-  # end
-
+  def best_item_for_merchant(merchant_id)
+    sorted_highest_revenue_invoice_items = invoice_items_for_merchant(merchant_id).sort_by do |invoice_item|
+      ((invoice_item.quantity) * (invoice_item.unit_price))
+    end.reverse
+    @items_repo.find_by_id(sorted_highest_revenue_invoice_items.first.item_id)
+  end
 
 end
