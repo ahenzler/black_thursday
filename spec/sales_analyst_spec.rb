@@ -105,11 +105,11 @@ RSpec.describe SalesAnalyst do
       expect(sales_analyst.invoice_total(46).class).to eq(BigDecimal)
     end
 
-    xit 'can return the total revenue at a given date' do
+    it 'can return the total revenue at a given date' do
       expect(sales_analyst.total_revenue_by_date(Time.parse("2009-02-07"))).to eq(21067.77)
     end
 
-    xit 'can return top revenue earners by given number' do
+    it 'can return top revenue earners by given number' do
       expected = sales_analyst.top_revenue_earners(3)
       expect(expected.class).to eq(Array)
       expect(expected.first.class).to eq(Merchant)
@@ -124,7 +124,7 @@ RSpec.describe SalesAnalyst do
       expect(expected.length).to eq(20)
     end
 
-    it 'can return merchants with pending invoices' do
+    xit 'can return merchants with pending invoices' do
       expect(sales_analyst.merchants_with_pending_invoices.length).to eq(467)
       expect(sales_analyst.merchants_with_pending_invoices.first.class).to eq(Merchant)
     end
@@ -135,17 +135,25 @@ RSpec.describe SalesAnalyst do
       expect(expected.first.class).to eq Merchant
     end
 
-    # it 'can return merchants with one item in given month' do
-    #   expected = sales_analyst.merchants_with_only_one_item_registered_in_month("March")
-    #   expect(expected.length).to eq 21
-    #   expect(expected.first.class).to eq Merchant
-    # end
+    xit 'can return merchants with one item in given month' do
+      expected = sales_analyst.merchants_with_only_one_item_registered_in_month("March")
+      expect(expected.length).to eq 21
+      expect(expected.first.class).to eq Merchant
+    end
 
-    it 'can return revenue by merchant' do
+    xit 'can return revenue by merchant' do
       expected = sales_analyst.revenue_by_merchant(12334194)
 
       expect(expected).to eq BigDecimal(expected)
       expect(expected.class).to eq BigDecimal
+    end
+
+    it 'can return the most sold item for a merchant' do
+      expect(sales_analyst.most_sold_item_for_merchant(12334105).length).to eq(7)
+    end
+
+    xit 'can return best item for a merchant' do
+      expect(sales_analyst.best_item_for_a_merchant(12334105).length).to eq([])
     end
 
   end

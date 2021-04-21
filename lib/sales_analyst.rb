@@ -371,12 +371,39 @@ class SalesAnalyst
     end
   end
 
-  # def merchants_with_only_one_item_registered_in_month(month)
-  #   merchants_with_only_one_item.find_all do |merchant|
-  #     require'pry';binding.pry
-  #     merchant.created_at.month == month
-  #   end
-  # end
+  def months
+    months = {
+      'Janurary' => 1,
+      'Feburary' => 2,
+      'March' => 3,
+      'April' => 4,
+      'May' => 5,
+      'June' => 6,
+      'July' => 7,
+      'August' => 8,
+      'September' => 9,
+      'October' => 10,
+      'November' => 11,
+      'December' => 12
+      }
+  end
+
+  def merchants_with_only_one_item_registered_in_month(month)
+    items_of_merchants_with_one_item = merchant_ids_with_1_item.flat_map do |num|
+      @items_repo.find_all_by_merchant_id(num)
+    end.uniq
+    array = []
+    items_of_merchants_with_one_item.each do |item|
+      if item.updated_at.month == months[month]
+        array << item
+      end
+    end
+    array
+    new = array.map do |array|
+      array.merchant_id
+    end.uniq
+    # require'pry';binding.pry
+  end
 
   def revenue_by_merchant(merchant)
     array = []
@@ -395,6 +422,41 @@ class SalesAnalyst
     result = array2.sum do |num|
       invoice_total(num)
     end
+
   end
+
+  def invoices_for_merchant(merchant_id)
+    invoices_for_merchant = all_invoices.find_all do |invoice|
+      invoice.merchant_id == merchant_id
+    end
+  end
+  def invoice_items_for_merchant(merchant_id)
+    invoice_items_for_merchant = invoices_for_merchant(merchant_id).flat_map do |invoice|
+      @invoice_items_repo.find_all_by_invoice_id(invoice.id)
+    end
+  end
+  def sorted_highest_sold_invoice_items(merchant_id)
+    sorted_highest_sold_invoice_items = invoice_items_for_merchant(merchant_id).sort_by do |invoice_item|
+      invoice_item.quantity
+    end.reverse
+  end
+  def highest_sold_invoice_items(merchant_id)
+    marker = sorted_highest_sold_invoice_items(merchant_id).first.quantity
+    highest_sold_invoice_items = sorted_highest_sold_invoice_items(merchant_id).find_all do |invoice_item|
+      invoice_item.quantity == marker
+    end
+  end
+  def most_sold_item_for_merchant(merchant_id)
+    highest_sold_invoice_items(merchant_id).map do |invoice_item|
+      @items_repo.find_by_id(invoice_item.item_id)
+    end.uniq
+  end
+
+  # def best_item_for_a_merchant(merchant)
+  #   merchant = @merchants_repo.find_by_id(merchant)
+  #   # invoice_items_for_merhcants =
+  #   require'pry';binding.pry
+  # end
+
 
 end
