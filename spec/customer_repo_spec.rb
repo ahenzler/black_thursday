@@ -77,5 +77,10 @@ RSpec.describe Customer do
       expected = customer_repository.find_by_id(1001)
       expect(expected).to eq(nil)
     end
+
+    it 'can check if it exists' do
+
+      expect(customer_repository.customer_exists?(100000000)).to eq(false)
+    end
   end
 end
